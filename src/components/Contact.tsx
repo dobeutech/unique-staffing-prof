@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { Card } from "@/components/ui/card"
-import { Phone, Envelope, MapPin } from "@phosphor-icons/react"
+import { Phone, Mail, MapPin, Printer, MessageSquare } from "lucide-react"
 import { toast } from "sonner"
 
 interface ContactSubmission {
@@ -146,13 +146,13 @@ export function Contact() {
             <Card className="p-6 border-border bg-card">
               <div className="flex items-start gap-4">
                 <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
-                  <Phone size={20} className="text-primary" weight="duotone" />
+                  <Phone size={20} className="text-primary" />
                 </div>
                 <div>
                   <h3 className="font-semibold text-foreground mb-1">Phone</h3>
                   <p className="text-muted-foreground text-sm">Mon-Fri 8am-6pm</p>
-                  <a href="tel:+15551234567" className="text-primary hover:underline font-medium">
-                    (555) 123-4567
+                  <a href="tel:+13012385182" className="text-primary hover:underline font-medium">
+                    (301) 238-5182
                   </a>
                 </div>
               </div>
@@ -161,13 +161,43 @@ export function Contact() {
             <Card className="p-6 border-border bg-card">
               <div className="flex items-start gap-4">
                 <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
-                  <Envelope size={20} className="text-primary" weight="duotone" />
+                  <MessageSquare size={20} className="text-primary" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-foreground mb-1">Text for Work</h3>
+                  <p className="text-muted-foreground text-sm">Quick response via text</p>
+                  <a href="sms:+13012385183" className="text-primary hover:underline font-medium">
+                    1 (301) 238-5183
+                  </a>
+                </div>
+              </div>
+            </Card>
+
+            <Card className="p-6 border-border bg-card">
+              <div className="flex items-start gap-4">
+                <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
+                  <Printer size={20} className="text-primary" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-foreground mb-1">Fax</h3>
+                  <p className="text-muted-foreground text-sm">Document submissions</p>
+                  <span className="text-primary font-medium">
+                    (240) 392-3898
+                  </span>
+                </div>
+              </div>
+            </Card>
+
+            <Card className="p-6 border-border bg-card">
+              <div className="flex items-start gap-4">
+                <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
+                  <Mail size={20} className="text-primary" />
                 </div>
                 <div>
                   <h3 className="font-semibold text-foreground mb-1">Email</h3>
                   <p className="text-muted-foreground text-sm">We'll respond within 24 hours</p>
-                  <a href="mailto:info@uniquestaffing.com" className="text-primary hover:underline font-medium break-all">
-                    info@uniquestaffing.com
+                  <a href="mailto:info@uniquestaffingprofessionals.com" className="text-primary hover:underline font-medium break-all">
+                    info@uniquestaffingprofessionals.com
                   </a>
                 </div>
               </div>
@@ -176,14 +206,14 @@ export function Contact() {
             <Card className="p-6 border-border bg-card">
               <div className="flex items-start gap-4">
                 <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
-                  <MapPin size={20} className="text-primary" weight="duotone" />
+                  <MapPin size={20} className="text-primary" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-foreground mb-1">Office</h3>
+                  <h3 className="font-semibold text-foreground mb-1">Office Address</h3>
                   <p className="text-muted-foreground text-sm">
-                    123 Business Plaza<br />
-                    Suite 500<br />
-                    Metropolis, ST 12345
+                    6200 Baltimore Avenue<br />
+                    Floor 3, Suite R35<br />
+                    Riverdale, MD 20737
                   </p>
                 </div>
               </div>

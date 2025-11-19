@@ -1,36 +1,31 @@
 import { Card } from "@/components/ui/card"
-import { Briefcase, UsersFour, ClipboardText, ChartLineUp, Handshake, UserCircleGear } from "@phosphor-icons/react"
+import { Sparkles, Users, ShoppingCart, Phone, Factory } from "lucide-react"
 
 const services = [
   {
-    icon: Briefcase,
-    title: "Temporary Staffing",
-    description: "Flexible workforce solutions for short-term needs, seasonal peaks, and special projects. Quick deployment of qualified professionals."
+    icon: Sparkles,
+    title: "Janitorial",
+    description: "Professional cleaning and facility maintenance services to keep your workspace spotless and welcoming."
   },
   {
-    icon: Handshake,
-    title: "Permanent Placement",
-    description: "Find your next key team member. We source, screen, and present top candidates for full-time positions across all levels."
+    icon: Users,
+    title: "Human Resources",
+    description: "Comprehensive staffing and recruitment solutions to build your ideal workforce."
   },
   {
-    icon: ClipboardText,
-    title: "Contract-to-Hire",
-    description: "Evaluate candidates in real work situations before making permanent hiring decisions. Reduce risk and ensure cultural fit."
+    icon: ShoppingCart,
+    title: "Retail & Sales",
+    description: "Customer-facing retail positions and sales roles to drive your business growth."
   },
   {
-    icon: UsersFour,
-    title: "Executive Search",
-    description: "Specialized recruitment for leadership and executive positions. Discreet, thorough search for transformational talent."
+    icon: Phone,
+    title: "Call Center & Customer Service",
+    description: "Support representatives and customer service specialists to enhance client satisfaction."
   },
   {
-    icon: ChartLineUp,
-    title: "Workforce Consulting",
-    description: "Strategic guidance on workforce planning, talent acquisition strategies, and organizational development initiatives."
-  },
-  {
-    icon: UserCircleGear,
-    title: "Onboarding Support",
-    description: "Comprehensive onboarding services to ensure smooth transitions and rapid productivity for new hires."
+    icon: Factory,
+    title: "Industrial & Manufacturing",
+    description: "Production workers, warehouse staff, and manufacturing positions for operational excellence."
   }
 ]
 
@@ -40,14 +35,14 @@ export function Services() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2 className="font-heading font-bold text-3xl lg:text-4xl text-foreground mb-4">
-            Our Staffing Solutions
+            Industries We Serve
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Comprehensive staffing services tailored to your unique business needs
+            Professional staffing solutions across diverse industries
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 lg:gap-8">
           {services.map((service, index) => {
             const Icon = service.icon
             return (
@@ -56,7 +51,7 @@ export function Services() {
                 className="p-6 lg:p-8 hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border-border bg-card"
               >
                 <div className="w-12 h-12 lg:w-14 lg:h-14 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
-                  <Icon size={28} className="text-primary" weight="duotone" />
+                  <Icon size={28} className="text-primary" />
                 </div>
                 <h3 className="font-heading font-semibold text-xl lg:text-2xl text-foreground mb-3">
                   {service.title}

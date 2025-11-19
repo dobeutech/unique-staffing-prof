@@ -203,13 +203,22 @@ export function ApplyForm({ onSuccess }: ApplyFormProps) {
 
               <div className="space-y-2">
                 <Label htmlFor="position_interested">Position/Field of Interest *</Label>
-                <Input
-                  id="position_interested"
+                <Select
                   value={formData.position_interested}
-                  onChange={(e) => setFormData({ ...formData, position_interested: e.target.value })}
+                  onValueChange={(value) => setFormData({ ...formData, position_interested: value })}
                   required
-                  placeholder="e.g., Software Developer, Nurse, Warehouse Manager"
-                />
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select a position" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Janitorial">Janitorial</SelectItem>
+                    <SelectItem value="Human Resources">Human Resources</SelectItem>
+                    <SelectItem value="Retail & Sales">Retail & Sales</SelectItem>
+                    <SelectItem value="Call Center & Customer Service">Call Center & Customer Service</SelectItem>
+                    <SelectItem value="Industrial & Manufacturing">Industrial & Manufacturing</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
 
               <div className="space-y-2">
