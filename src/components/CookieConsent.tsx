@@ -250,7 +250,7 @@ export function CookieConsent() {
                 <p className="text-xs text-muted-foreground">
                   {t('cookieConsent.learnMore')}{' '}
                   <a href="/privacy" className="text-primary hover:underline">
-                    {t('cookieConsent.privacyPolicy')}
+                    Privacy Policy
                   </a>
                 </p>
               </div>
