@@ -1,0 +1,286 @@
+openapi: 3.0.3
+info:
+  title: Unique Staffing Professionals API
+  description: |
+    API for accessing applicant and job data from Unique Staffing Professionals Inc.
+    This API is designed for integration with findd.ai and other authorized partners.
+  version: 1.0.0
+  contact:
+    name: Unique Staffing Professionals
+    email: admin@uniquestaffingprofessionals.com
+    url: https://uniquestaffingprofessionals.com
+
+servers:
+  - url: https://your-project.supabase.co/functions/v1/api
+    description: Production API
+
+security:
+  - ApiKeyAuth: []
+
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: x-api-key
+      description: API key provided by Unique Staffing Professionals
+
+  schemas:
+    Applicant:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier
+        created_at:
+          type: string
+          format: date-time
+          description: Application submission timestamp
+        updated_at:
+          type: string
+          format: date-time
+          description: Last update timestamp
+        full_name:
+          type: string
+          description: Full name of the applicant
+        email:
+          type: string
+          format: email
+          description: Email address
+        email_verified:
+          type: boolean
+          description: Whether email has been verified
+        phone:
+          type: string
+          description: Phone number
+        phone_normalized:
+          type: string
+          description: Normalized phone number
+        position_interested:
+          type: string
+          description: Primary position of interest
+        positions_interested:
+          type: array
+          items:
+            type: string
+          description: List of all positions interested in
+        experience_years:
+          type: integer
+          description: Years of experience
+        resume_url:
+          type: string
+          format: uri
+          description: URL to resume file
+        resume_filename:
+          type: string
+          description: Original resume filename
+        cover_letter:
+          type: string
+          description: Cover letter text
+        job_posting_url:
+          type: string
+          format: uri
+          description: URL of job posting applied to
+        linkedin_url:
+          type: string
+          format: uri
+          description: LinkedIn profile URL
+        portfolio_url:
+          type: string
+          format: uri
+          description: Portfolio URL
+        submission_location:
+          type: string
+          description: Location where application was submitted
+        status:
+          type: string
+          enum: [new, reviewing, shortlisted, rejected, hired]
+          description: Application status
+        notes:
+          type: string
+          description: Internal notes
+        admin_notified_at:
+          type: string
+          format: date-time
+          description: When admin was notified
+
+    Job:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        title:
+          type: string
+          description: Job title
+        description:
+          type: string
+          description: Job description
+        requirements:
+          type: string
+          description: Job requirements
+        location_city:
+          type: string
+        location_state:
+          type: string
+        location_zip:
+          type: string
+        job_type:
+          type: string
+          enum: [full-time, part-time, contract, temporary]
+        category:
+          type: string
+        salary_min:
+          type: integer
+        salary_max:
+          type: integer
+        salary_type:
+          type: string
+          enum: [hourly, annual]
+        is_active:
+          type: boolean
+        featured:
+          type: boolean
+        expires_at:
+          type: string
+          format: date-time
+
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message
+
+paths:
+  /applicants:
+    get:
+      summary: List all applicants
+      description: Retrieve a paginated list of applicants with optional filtering
+      parameters:
+        - name: status
+          in: query
+          description: Filter by application status
+          schema:
+            type: string
+            enum: [new, reviewing, shortlisted, rejected, hired]
+        - name: limit
+          in: query
+          description: Number of results to return (max 100)
+          schema:
+            type: integer
+            default: 100
+            maximum: 100
+        - name: offset
+          in: query
+          description: Number of results to skip
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: List of applicants
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Applicant'
+                  count:
+                    type: integer
+                  limit:
+                    type: integer
+                  offset:
+                    type: integer
+        '401':
+          description: Invalid or missing API key
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /applicants/{id}:
+    get:
+      summary: Get applicant by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Applicant details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Applicant'
+        '404':
+          description: Applicant not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    put:
+      summary: Update applicant
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  enum: [new, reviewing, shortlisted, rejected, hired]
+                notes:
+                  type: string
+      responses:
+        '200':
+          description: Updated applicant
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Applicant'
+
+  /jobs:
+    get:
+      summary: List all active jobs
+      description: Retrieve all currently active job listings
+      responses:
+        '200':
+          description: List of jobs
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Job'

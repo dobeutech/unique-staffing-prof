@@ -8,12 +8,14 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Upload, CheckCircle } from "@phosphor-icons/react"
 import { toast } from "sonner"
 import { supabase, ApplicantInsert } from "@/lib/supabase"
+import { useLanguage } from "@/contexts/LanguageContext"
 
 interface ApplyFormProps {
   onSuccess?: () => void
 }
 
 export function ApplyForm({ onSuccess }: ApplyFormProps) {
+  const { t } = useLanguage()
   const [formData, setFormData] = useState({
     full_name: "",
     email: "",
@@ -147,10 +149,10 @@ export function ApplyForm({ onSuccess }: ApplyFormProps) {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h2 className="font-heading font-bold text-3xl lg:text-4xl text-foreground mb-4">
-            Join Our Talent Network
+            {t('applyForm.title')}
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Submit your application and let us match you with the perfect opportunity
+            {t('applyForm.subtitle')}
           </p>
         </div>
 
@@ -158,11 +160,11 @@ export function ApplyForm({ onSuccess }: ApplyFormProps) {
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Personal Information */}
             <div className="space-y-6">
-              <h3 className="font-heading font-semibold text-xl text-foreground">Personal Information</h3>
+              <h3 className="font-heading font-semibold text-xl text-foreground">{t('applyForm.personalInfo')}</h3>
 
               <div className="grid sm:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <Label htmlFor="full_name">Full Name *</Label>
+                  <Label htmlFor="full_name">{t('applyForm.fullName')} *</Label>
                   <Input
                     id="full_name"
                     value={formData.full_name}
@@ -172,7 +174,7 @@ export function ApplyForm({ onSuccess }: ApplyFormProps) {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="email">Email Address *</Label>
+                  <Label htmlFor="email">{t('applyForm.email')} *</Label>
                   <Input
                     id="email"
                     type="email"
@@ -185,7 +187,7 @@ export function ApplyForm({ onSuccess }: ApplyFormProps) {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="phone">Phone Number *</Label>
+                <Label htmlFor="phone">{t('applyForm.phone')} *</Label>
                 <Input
                   id="phone"
                   type="tel"
@@ -199,41 +201,50 @@ export function ApplyForm({ onSuccess }: ApplyFormProps) {
 
             {/* Professional Information */}
             <div className="space-y-6">
-              <h3 className="font-heading font-semibold text-xl text-foreground">Professional Information</h3>
+              <h3 className="font-heading font-semibold text-xl text-foreground">{t('applyForm.professionalInfo')}</h3>
 
               <div className="space-y-2">
-                <Label htmlFor="position_interested">Position/Field of Interest *</Label>
-                <Input
-                  id="position_interested"
+                <Label htmlFor="position_interested">{t('applyForm.position')} *</Label>
+                <Select
                   value={formData.position_interested}
-                  onChange={(e) => setFormData({ ...formData, position_interested: e.target.value })}
+                  onValueChange={(value) => setFormData({ ...formData, position_interested: value })}
                   required
-                  placeholder="e.g., Software Developer, Nurse, Warehouse Manager"
-                />
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder={t('applyForm.selectPosition')} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Janitorial">{t('services.janitorial.title')}</SelectItem>
+                    <SelectItem value="Human Resources">{t('services.humanResources.title')}</SelectItem>
+                    <SelectItem value="Retail & Sales">{t('services.retailSales.title')}</SelectItem>
+                    <SelectItem value="Call Center & Customer Service">{t('services.callCenter.title')}</SelectItem>
+                    <SelectItem value="Industrial & Manufacturing">{t('services.industrial.title')}</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="experience_years">Years of Experience *</Label>
+                <Label htmlFor="experience_years">{t('applyForm.experience')} *</Label>
                 <Select
                   value={formData.experience_years}
                   onValueChange={(value) => setFormData({ ...formData, experience_years: value })}
                   required
                 >
                   <SelectTrigger>
-                    <SelectValue placeholder="Select years of experience" />
+                    <SelectValue placeholder={t('applyForm.selectExperience')} />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="0">Less than 1 year</SelectItem>
-                    <SelectItem value="1">1-2 years</SelectItem>
-                    <SelectItem value="3">3-5 years</SelectItem>
-                    <SelectItem value="6">6-10 years</SelectItem>
-                    <SelectItem value="11">10+ years</SelectItem>
+                    <SelectItem value="0">{t('applyForm.lessThan1Year')}</SelectItem>
+                    <SelectItem value="1">{t('applyForm.years1to2')}</SelectItem>
+                    <SelectItem value="3">{t('applyForm.years3to5')}</SelectItem>
+                    <SelectItem value="6">{t('applyForm.years6to10')}</SelectItem>
+                    <SelectItem value="11">{t('applyForm.years10plus')}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="resume">Resume/CV *</Label>
+                <Label htmlFor="resume">{t('applyForm.resume')} *</Label>
                 <div className="flex items-center gap-4">
                   <Input
                     ref={fileInputRef}
@@ -250,28 +261,28 @@ export function ApplyForm({ onSuccess }: ApplyFormProps) {
                     className="w-full sm:w-auto"
                   >
                     <Upload size={20} className="mr-2" />
-                    {resume ? "Change Resume" : "Upload Resume"}
+                    {resume ? t('applyForm.changeResume') : t('applyForm.uploadResume')}
                   </Button>
                   {resume && (
                     <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                      <CheckCircle size={16} className="text-green-600" weight="fill" />
+                      <CheckCircle size={16} className="text-primary" weight="fill" />
                       <span className="truncate max-w-[200px]">{resume.name}</span>
                     </div>
                   )}
                 </div>
                 <p className="text-sm text-muted-foreground">
-                  Accepted formats: PDF, DOC, DOCX (Max 5MB)
+                  {t('applyForm.acceptedFormats')}
                 </p>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="cover_letter">Cover Letter (Optional)</Label>
+                <Label htmlFor="cover_letter">{t('applyForm.coverLetter')}</Label>
                 <Textarea
                   id="cover_letter"
                   value={formData.cover_letter}
                   onChange={(e) => setFormData({ ...formData, cover_letter: e.target.value })}
                   rows={6}
-                  placeholder="Tell us about yourself and why you're interested in this opportunity..."
+                  placeholder={t('contact.messagePlaceholder')}
                 />
               </div>
             </div>
@@ -282,11 +293,11 @@ export function ApplyForm({ onSuccess }: ApplyFormProps) {
               className="w-full"
               disabled={isSubmitting || !resume}
             >
-              {isSubmitting ? "Submitting Application..." : "Submit Application"}
+              {isSubmitting ? t('applyForm.submitting') : t('applyForm.submit')}
             </Button>
 
             <p className="text-sm text-muted-foreground text-center">
-              By submitting this form, you agree to our privacy policy and terms of service.
+              {t('applyForm.privacyNotice')}
             </p>
           </form>
         </Card>

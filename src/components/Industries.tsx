@@ -1,72 +1,57 @@
 import { Card } from "@/components/ui/card"
-import { 
-  Heart, 
-  Factory, 
-  Storefront, 
-  Buildings, 
-  Truck,
-  Wrench,
-  ComputerTower,
-  Users
-} from "@phosphor-icons/react"
-
-const industries = [
-  {
-    icon: Heart,
-    title: "Healthcare",
-    description: "Medical professionals and support staff"
-  },
-  {
-    icon: Factory,
-    title: "Manufacturing",
-    description: "Production and industrial workforce"
-  },
-  {
-    icon: Storefront,
-    title: "Retail",
-    description: "Sales and customer service teams"
-  },
-  {
-    icon: Buildings,
-    title: "Corporate",
-    description: "Administrative and office professionals"
-  },
-  {
-    icon: Truck,
-    title: "Logistics",
-    description: "Supply chain and distribution experts"
-  },
-  {
-    icon: Wrench,
-    title: "Skilled Trades",
-    description: "Technical and trade specialists"
-  },
-  {
-    icon: ComputerTower,
-    title: "Technology",
-    description: "IT professionals and developers"
-  },
-  {
-    icon: Users,
-    title: "Hospitality",
-    description: "Service industry personnel"
-  }
-]
+import { Sparkles, Users, ShoppingCart, Phone, Factory, MapPin } from "lucide-react"
+import { useLanguage } from "@/contexts/LanguageContext"
 
 export function Industries() {
+  const { t } = useLanguage()
+
+  const industries = [
+    {
+      icon: Sparkles,
+      title: t('industries.janitorial'),
+      description: t('industries.janitorialDesc')
+    },
+    {
+      icon: Users,
+      title: t('industries.humanResources'),
+      description: t('industries.humanResourcesDesc')
+    },
+    {
+      icon: ShoppingCart,
+      title: t('industries.retailSales'),
+      description: t('industries.retailSalesDesc')
+    },
+    {
+      icon: Phone,
+      title: t('industries.callCenter'),
+      description: t('industries.callCenterDesc')
+    },
+    {
+      icon: Factory,
+      title: t('industries.industrial'),
+      description: t('industries.industrialDesc')
+    }
+  ]
+
   return (
     <section id="industries" className="py-16 lg:py-24 bg-secondary/30">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2 className="font-heading font-bold text-3xl lg:text-4xl text-foreground mb-4">
-            Industries We Serve
+            {t('industries.title')}
           </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Specialized expertise across diverse sectors
+          <div className="flex items-center justify-center gap-2 mb-4">
+            <MapPin className="text-primary" size={20} />
+            <p className="text-lg font-semibold text-foreground">
+              {t('industries.servingRegions')}
+            </p>
+          </div>
+          <p className="text-base text-muted-foreground max-w-2xl mx-auto">
+            {t('industries.subtitle')}
           </p>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 lg:gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6 lg:gap-8">
           {industries.map((industry, index) => {
             const Icon = industry.icon
             return (
@@ -74,8 +59,8 @@ export function Industries() {
                 key={index}
                 className="p-6 text-center hover:shadow-md transition-all duration-300 hover:-translate-y-1 border-border bg-card"
               >
-                <div className="w-16 h-16 mx-auto rounded-full bg-accent/10 flex items-center justify-center mb-4">
-                  <Icon size={32} className="text-accent" weight="duotone" />
+                <div className="w-16 h-16 mx-auto rounded-full bg-primary/10 flex items-center justify-center mb-4">
+                  <Icon size={32} className="text-primary" />
                 </div>
                 <h3 className="font-heading font-semibold text-lg text-foreground mb-2">
                   {industry.title}

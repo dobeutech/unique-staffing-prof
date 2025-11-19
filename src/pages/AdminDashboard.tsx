@@ -9,17 +9,20 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
-import { SignOut, MagnifyingGlass, Download, Eye, Funnel, SortAscending } from "@phosphor-icons/react"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { SignOut, MagnifyingGlass, Download, Eye, Funnel, SortAscending, Buildings, ChartBar, Export, Briefcase } from "@phosphor-icons/react"
 import { toast } from "sonner"
 import { useAuth } from "@/contexts/AuthContext"
 import { supabase, Applicant } from "@/lib/supabase"
+import { BusinessInfoManager } from "@/components/admin/BusinessInfoManager"
+import { AnalyticsDashboard } from "@/components/admin/AnalyticsDashboard"
 
 const statusColors = {
-  new: "bg-blue-100 text-blue-800",
-  reviewing: "bg-yellow-100 text-yellow-800",
-  shortlisted: "bg-green-100 text-green-800",
-  rejected: "bg-red-100 text-red-800",
-  hired: "bg-purple-100 text-purple-800"
+  new: "bg-accent/20 text-accent-foreground dark:bg-accent/30",
+  reviewing: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300",
+  shortlisted: "bg-primary/20 text-primary dark:bg-primary/30",
+  rejected: "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300",
+  hired: "bg-primary/30 text-primary dark:bg-primary/40"
 }
 
 const statusLabels = {
@@ -39,6 +42,7 @@ export function AdminDashboard() {
   const [searchQuery, setSearchQuery] = useState("")
   const [statusFilter, setStatusFilter] = useState<string>("all")
   const [sortBy, setSortBy] = useState<string>("created_at_desc")
+  const [positionFilter, setPositionFilter] = useState<string>("all")
   const [selectedApplicant, setSelectedApplicant] = useState<Applicant | null>(null)
   const [isDetailDialogOpen, setIsDetailDialogOpen] = useState(false)
   const [updatingStatus, setUpdatingStatus] = useState(false)
@@ -57,7 +61,47 @@ export function AdminDashboard() {
 
   useEffect(() => {
     filterAndSortApplicants()
-  }, [applicants, searchQuery, statusFilter, sortBy])
+  }, [applicants, searchQuery, statusFilter, positionFilter, sortBy])
+
+  // Get unique positions for filter
+  const uniquePositions = Array.from(new Set(
+    applicants.flatMap(app =>
+      app.positions_interested && app.positions_interested.length > 0
+        ? app.positions_interested
+        : [app.position_interested]
+    ).filter(Boolean)
+  )).sort()
+
+  // Export to CSV function
+  const exportToCSV = () => {
+    const headers = ['Name', 'Email', 'Phone', 'Position', 'Experience (Years)', 'Status', 'Applied Date', 'Notes']
+    const rows = filteredApplicants.map(app => [
+      app.full_name,
+      app.email,
+      app.phone,
+      app.positions_interested?.join('; ') || app.position_interested,
+      app.experience_years,
+      app.status,
+      new Date(app.created_at).toLocaleDateString(),
+      app.notes || ''
+    ])
+
+    const csvContent = [
+      headers.join(','),
+      ...rows.map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(','))
+    ].join('\n')
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+    link.download = `applicants_${new Date().toISOString().split('T')[0]}.csv`
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    URL.revokeObjectURL(url)
+    toast.success('Exported to CSV')
+  }
 
   const fetchApplicants = async () => {
     try {
@@ -83,6 +127,16 @@ export function AdminDashboard() {
     // Apply status filter
     if (statusFilter !== "all") {
       filtered = filtered.filter(app => app.status === statusFilter)
+    }
+
+    // Apply position filter
+    if (positionFilter !== "all") {
+      filtered = filtered.filter(app => {
+        if (app.positions_interested && app.positions_interested.length > 0) {
+          return app.positions_interested.includes(positionFilter)
+        }
+        return app.position_interested === positionFilter
+      })
     }
 
     // Apply search filter
@@ -215,6 +269,20 @@ export function AdminDashboard() {
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <Tabs defaultValue="applicants" className="w-full">
+          <TabsList className="mb-6">
+            <TabsTrigger value="applicants">Applicants</TabsTrigger>
+            <TabsTrigger value="analytics">
+              <ChartBar size={16} className="mr-2" />
+              Analytics
+            </TabsTrigger>
+            <TabsTrigger value="business-info">
+              <Buildings size={16} className="mr-2" />
+              Business Info & SEO
+            </TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="applicants"  className="space-y-6">
         {/* Stats */}
         <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-8">
           <Card className="p-4">
@@ -223,7 +291,7 @@ export function AdminDashboard() {
           </Card>
           <Card className="p-4">
             <p className="text-sm text-muted-foreground mb-1">New</p>
-            <p className="text-2xl font-bold text-blue-600">
+            <p className="text-2xl font-bold text-accent-foreground">
               {applicants.filter(a => a.status === 'new').length}
             </p>
           </Card>
@@ -235,13 +303,13 @@ export function AdminDashboard() {
           </Card>
           <Card className="p-4">
             <p className="text-sm text-muted-foreground mb-1">Shortlisted</p>
-            <p className="text-2xl font-bold text-green-600">
+            <p className="text-2xl font-bold text-primary">
               {applicants.filter(a => a.status === 'shortlisted').length}
             </p>
           </Card>
           <Card className="p-4">
             <p className="text-sm text-muted-foreground mb-1">Hired</p>
-            <p className="text-2xl font-bold text-purple-600">
+            <p className="text-2xl font-bold text-primary">
               {applicants.filter(a => a.status === 'hired').length}
             </p>
           </Card>
@@ -249,7 +317,7 @@ export function AdminDashboard() {
 
         {/* Filters */}
         <Card className="p-6 mb-6">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
             <div className="relative">
               <MagnifyingGlass
                 size={20}
@@ -264,7 +332,7 @@ export function AdminDashboard() {
             </div>
 
             <div className="flex items-center gap-2">
-              <Funnel size={20} className="text-muted-foreground" />
+              <Funnel size={20} className="text-muted-foreground flex-shrink-0" />
               <Select value={statusFilter} onValueChange={setStatusFilter}>
                 <SelectTrigger>
                   <SelectValue placeholder="Filter by status" />
@@ -281,7 +349,22 @@ export function AdminDashboard() {
             </div>
 
             <div className="flex items-center gap-2">
-              <SortAscending size={20} className="text-muted-foreground" />
+              <Briefcase size={20} className="text-muted-foreground flex-shrink-0" />
+              <Select value={positionFilter} onValueChange={setPositionFilter}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Filter by position" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Positions</SelectItem>
+                  {uniquePositions.map(position => (
+                    <SelectItem key={position} value={position}>{position}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <SortAscending size={20} className="text-muted-foreground flex-shrink-0" />
               <Select value={sortBy} onValueChange={setSortBy}>
                 <SelectTrigger>
                   <SelectValue placeholder="Sort by" />
@@ -294,6 +377,15 @@ export function AdminDashboard() {
                 </SelectContent>
               </Select>
             </div>
+          </div>
+          <div className="flex justify-between items-center">
+            <p className="text-sm text-muted-foreground">
+              Showing {filteredApplicants.length} of {applicants.length} applicants
+            </p>
+            <Button variant="outline" size="sm" onClick={exportToCSV} disabled={filteredApplicants.length === 0}>
+              <Export size={16} className="mr-2" />
+              Export CSV
+            </Button>
           </div>
         </Card>
 
@@ -330,7 +422,11 @@ export function AdminDashboard() {
                     <TableRow key={applicant.id}>
                       <TableCell className="font-medium">{applicant.full_name}</TableCell>
                       <TableCell>{applicant.email}</TableCell>
-                      <TableCell>{applicant.position_interested}</TableCell>
+                      <TableCell>
+                        {applicant.positions_interested && applicant.positions_interested.length > 0
+                          ? applicant.positions_interested.join(', ')
+                          : applicant.position_interested}
+                      </TableCell>
                       <TableCell>{applicant.experience_years} years</TableCell>
                       <TableCell>
                         <Badge className={statusColors[applicant.status]}>
@@ -371,7 +467,6 @@ export function AdminDashboard() {
             </Table>
           </div>
         </Card>
-      </main>
 
       {/* Detail Dialog */}
       <Dialog open={isDetailDialogOpen} onOpenChange={setIsDetailDialogOpen}>
@@ -415,8 +510,12 @@ export function AdminDashboard() {
                 <h3 className="font-semibold text-lg">Professional Information</h3>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <Label className="text-muted-foreground">Position Interested</Label>
-                    <p className="font-medium">{selectedApplicant.position_interested}</p>
+                    <Label className="text-muted-foreground">Position(s) Interested</Label>
+                    <p className="font-medium">
+                      {selectedApplicant.positions_interested && selectedApplicant.positions_interested.length > 0
+                        ? selectedApplicant.positions_interested.join(', ')
+                        : selectedApplicant.position_interested}
+                    </p>
                   </div>
                   <div>
                     <Label className="text-muted-foreground">Years of Experience</Label>
@@ -487,6 +586,17 @@ export function AdminDashboard() {
           )}
         </DialogContent>
       </Dialog>
+          </TabsContent>
+
+          <TabsContent value="analytics">
+            <AnalyticsDashboard />
+          </TabsContent>
+
+          <TabsContent value="business-info">
+            <BusinessInfoManager />
+          </TabsContent>
+        </Tabs>
+      </main>
     </div>
   )
 }

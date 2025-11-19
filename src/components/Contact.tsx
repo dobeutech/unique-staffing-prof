@@ -5,8 +5,11 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { Card } from "@/components/ui/card"
-import { Phone, Envelope, MapPin } from "@phosphor-icons/react"
+import { Phone, Mail, MapPin, Printer, MessageSquare } from "lucide-react"
 import { toast } from "sonner"
+import { useBusinessInfo } from "@/contexts/BusinessInfoContext"
+import { useLanguage } from "@/contexts/LanguageContext"
+import { BusinessAddress, BusinessPhone, BusinessEmail } from "@/components/seo/NAPDisplay"
 
 interface ContactSubmission {
   id: string
@@ -19,6 +22,8 @@ interface ContactSubmission {
 }
 
 export function Contact() {
+  const { businessInfo } = useBusinessInfo()
+  const { t } = useLanguage()
   const [submissions, setSubmissions] = useKV<ContactSubmission[]>("contact-submissions", [])
   const [formData, setFormData] = useState({
     name: "",
@@ -41,9 +46,7 @@ export function Contact() {
 
     setSubmissions((current) => [...(current || []), submission])
 
-    toast.success("Message sent successfully!", {
-      description: "We'll get back to you within 24 hours."
-    })
+    toast.success(t('contact.success'))
 
     setFormData({
       name: "",
@@ -56,15 +59,17 @@ export function Contact() {
     setIsSubmitting(false)
   }
 
+  if (!businessInfo) return null
+
   return (
     <section id="contact" className="py-16 lg:py-24 bg-background">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2 className="font-heading font-bold text-3xl lg:text-4xl text-foreground mb-4">
-            Get in Touch
+            {t('contact.title')}
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Ready to find your next great hire or explore career opportunities? Let's talk.
+            {t('contact.subtitle')}
           </p>
         </div>
 
@@ -74,7 +79,7 @@ export function Contact() {
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid sm:grid-cols-2 gap-6">
                   <div className="space-y-2">
-                    <Label htmlFor="name">Full Name *</Label>
+                    <Label htmlFor="name">{t('contact.fullName')} *</Label>
                     <Input
                       id="name"
                       value={formData.name}
@@ -84,7 +89,7 @@ export function Contact() {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="email">Email Address *</Label>
+                    <Label htmlFor="email">{t('contact.email')} *</Label>
                     <Input
                       id="email"
                       type="email"
@@ -98,7 +103,7 @@ export function Contact() {
 
                 <div className="grid sm:grid-cols-2 gap-6">
                   <div className="space-y-2">
-                    <Label htmlFor="phone">Phone Number</Label>
+                    <Label htmlFor="phone">{t('contact.phone')}</Label>
                     <Input
                       id="phone"
                       type="tel"
@@ -108,7 +113,7 @@ export function Contact() {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="company">Company Name</Label>
+                    <Label htmlFor="company">{t('contact.companyName')}</Label>
                     <Input
                       id="company"
                       value={formData.company}
@@ -119,14 +124,14 @@ export function Contact() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="message">Message *</Label>
+                  <Label htmlFor="message">{t('contact.message')} *</Label>
                   <Textarea
                     id="message"
                     value={formData.message}
                     onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                     required
                     rows={6}
-                    placeholder="Tell us about your staffing needs or career goals..."
+                    placeholder={t('contact.messagePlaceholder')}
                   />
                 </div>
 
@@ -136,7 +141,7 @@ export function Contact() {
                   className="w-full sm:w-auto"
                   disabled={isSubmitting}
                 >
-                  {isSubmitting ? "Sending..." : "Send Message"}
+                  {isSubmitting ? t('contact.submitting') : t('contact.submit')}
                 </Button>
               </form>
             </Card>
@@ -146,14 +151,12 @@ export function Contact() {
             <Card className="p-6 border-border bg-card">
               <div className="flex items-start gap-4">
                 <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
-                  <Phone size={20} className="text-primary" weight="duotone" />
+                  <Phone size={20} className="text-primary" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-foreground mb-1">Phone</h3>
-                  <p className="text-muted-foreground text-sm">Mon-Fri 8am-6pm</p>
-                  <a href="tel:+15551234567" className="text-primary hover:underline font-medium">
-                    (555) 123-4567
-                  </a>
+                  <h3 className="font-semibold text-foreground mb-1">{t('contact.phoneLabel')}</h3>
+                  <p className="text-muted-foreground text-sm">{t('contact.phoneHours')}</p>
+                  <BusinessPhone businessInfo={businessInfo} type="phone" className="text-primary hover:underline font-medium" />
                 </div>
               </div>
             </Card>
@@ -161,14 +164,12 @@ export function Contact() {
             <Card className="p-6 border-border bg-card">
               <div className="flex items-start gap-4">
                 <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
-                  <Envelope size={20} className="text-primary" weight="duotone" />
+                  <MessageSquare size={20} className="text-primary" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-foreground mb-1">Email</h3>
-                  <p className="text-muted-foreground text-sm">We'll respond within 24 hours</p>
-                  <a href="mailto:info@uniquestaffing.com" className="text-primary hover:underline font-medium break-all">
-                    info@uniquestaffing.com
-                  </a>
+                  <h3 className="font-semibold text-foreground mb-1">{t('contact.textLabel')}</h3>
+                  <p className="text-muted-foreground text-sm">{t('contact.textDescription')}</p>
+                  <BusinessPhone businessInfo={businessInfo} type="text" className="text-primary hover:underline font-medium" />
                 </div>
               </div>
             </Card>
@@ -176,15 +177,39 @@ export function Contact() {
             <Card className="p-6 border-border bg-card">
               <div className="flex items-start gap-4">
                 <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
-                  <MapPin size={20} className="text-primary" weight="duotone" />
+                  <Printer size={20} className="text-primary" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-foreground mb-1">Office</h3>
-                  <p className="text-muted-foreground text-sm">
-                    123 Business Plaza<br />
-                    Suite 500<br />
-                    Metropolis, ST 12345
-                  </p>
+                  <h3 className="font-semibold text-foreground mb-1">{t('contact.faxLabel')}</h3>
+                  <p className="text-muted-foreground text-sm">{t('contact.faxDescription')}</p>
+                  <span className="text-primary font-medium">
+                    <BusinessPhone businessInfo={businessInfo} type="fax" />
+                  </span>
+                </div>
+              </div>
+            </Card>
+
+            <Card className="p-6 border-border bg-card">
+              <div className="flex items-start gap-4">
+                <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
+                  <Mail size={20} className="text-primary" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-foreground mb-1">{t('contact.emailLabel')}</h3>
+                  <p className="text-muted-foreground text-sm">{t('contact.emailDescription')}</p>
+                  <BusinessEmail businessInfo={businessInfo} className="text-primary hover:underline font-medium break-all" />
+                </div>
+              </div>
+            </Card>
+
+            <Card className="p-6 border-border bg-card">
+              <div className="flex items-start gap-4">
+                <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
+                  <MapPin size={20} className="text-primary" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-foreground mb-1">{t('contact.officeAddress')}</h3>
+                  <BusinessAddress businessInfo={businessInfo} className="text-muted-foreground text-sm" />
                 </div>
               </div>
             </Card>
