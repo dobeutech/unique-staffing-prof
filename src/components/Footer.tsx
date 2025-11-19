@@ -2,6 +2,7 @@ import { Phone, Mail, MapPin, MessageSquare, Printer } from "lucide-react"
 import { useBusinessInfo } from "@/contexts/BusinessInfoContext"
 import { BusinessAddress, BusinessPhone, BusinessEmail } from "@/components/seo/NAPDisplay"
 import { useLanguage } from "@/contexts/LanguageContext"
+import { Link } from "react-router-dom"
 
 export function Footer() {
   const { businessInfo } = useBusinessInfo()
@@ -25,7 +26,7 @@ export function Footer() {
               {businessInfo.name}
             </h3>
             <p className="text-primary-foreground/80 mb-4 leading-relaxed" itemProp="description">
-              {businessInfo.tagline}
+              {t('footer.tagline')}
             </p>
             {businessInfo.ceo && (
               <p className="text-primary-foreground/70 text-sm mb-6">
@@ -110,8 +111,18 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="border-t border-primary-foreground/20 mt-12 pt-8 text-center text-primary-foreground/60 text-sm">
-          <p>&copy; {new Date().getFullYear()} {businessInfo.name}. {t('footer.rights')}</p>
+        <div className="border-t border-primary-foreground/20 mt-12 pt-8">
+          <div className="flex flex-col sm:flex-row justify-between items-center gap-4 text-primary-foreground/60 text-sm">
+            <p>&copy; {new Date().getFullYear()} {businessInfo.name}. {t('footer.rights')}</p>
+            <div className="flex gap-6">
+              <Link to="/privacy" className="hover:text-primary-foreground transition-colors">
+                {t('footer.privacy')}
+              </Link>
+              <Link to="/terms" className="hover:text-primary-foreground transition-colors">
+                {t('footer.terms')}
+              </Link>
+            </div>
+          </div>
         </div>
       </div>
     </footer>

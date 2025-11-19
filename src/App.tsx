@@ -10,6 +10,9 @@ import { AdminLogin } from "@/pages/AdminLogin"
 import { AdminDashboard } from "@/pages/AdminDashboard"
 import { ApplicationConfirmation } from "@/pages/ApplicationConfirmation"
 import { EmailVerification } from "@/pages/EmailVerification"
+import { PrivacyPolicy } from "@/pages/PrivacyPolicy"
+import { TermsOfService } from "@/pages/TermsOfService"
+import { Unsubscribe } from "@/pages/Unsubscribe"
 import { Toaster } from "@/components/ui/sonner"
 
 function App() {
@@ -24,6 +27,9 @@ function App() {
                 <Route path="/service-area/:city" element={<ServiceAreaPage />} />
                 <Route path="/application-confirmation" element={<ApplicationConfirmation />} />
                 <Route path="/verify-email" element={<EmailVerification />} />
+                <Route path="/privacy" element={<PrivacyPolicy />} />
+                <Route path="/terms" element={<TermsOfService />} />
+                <Route path="/unsubscribe" element={<Unsubscribe />} />
                 <Route path="/admin/login" element={<AdminLogin />} />
                 <Route
                   path="/admin/dashboard"

@@ -50,7 +50,7 @@ export function Hero() {
               15+
             </div>
             <div className="text-sm lg:text-base text-muted-foreground">
-              Years Experience
+              {t('hero.yearsExperience')}
             </div>
           </div>
           <div className="text-center">
@@ -58,7 +58,7 @@ export function Hero() {
               500+
             </div>
             <div className="text-sm lg:text-base text-muted-foreground">
-              Companies Served
+              {t('hero.companiesServed')}
             </div>
           </div>
           <div className="text-center">
@@ -66,7 +66,7 @@ export function Hero() {
               5,000+
             </div>
             <div className="text-sm lg:text-base text-muted-foreground">
-              Placements Made
+              {t('hero.placementsMade')}
             </div>
           </div>
           <div className="text-center">
@@ -74,7 +74,7 @@ export function Hero() {
               98%
             </div>
             <div className="text-sm lg:text-base text-muted-foreground">
-              Client Satisfaction
+              {t('hero.clientSatisfaction')}
             </div>
           </div>
         </div>
