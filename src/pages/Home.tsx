@@ -1,9 +1,10 @@
+import { useNavigate } from "react-router-dom"
 import { Navigation } from "@/components/Navigation"
 import { Hero } from "@/components/Hero"
 import { Services } from "@/components/Services"
 import { Industries } from "@/components/Industries"
 import { WhyChooseUs } from "@/components/WhyChooseUs"
-import { ApplyForm } from "@/components/ApplyForm"
+import { EnhancedApplyForm } from "@/components/EnhancedApplyForm"
 import { Testimonials } from "@/components/Testimonials"
 import { Contact } from "@/components/Contact"
 import { Footer } from "@/components/Footer"
@@ -13,8 +14,13 @@ import { StructuredData } from "@/components/seo/StructuredData"
 import { useLanguage } from "@/contexts/LanguageContext"
 
 export function Home() {
+  const navigate = useNavigate()
   const { businessInfo } = useBusinessInfo()
   const { t } = useLanguage()
+
+  const handleApplicationSuccess = () => {
+    navigate('/application-confirmation')
+  }
 
   if (!businessInfo) {
     return (
@@ -51,7 +57,7 @@ export function Home() {
         <Services />
         <Industries />
         <WhyChooseUs />
-        <ApplyForm />
+        <EnhancedApplyForm onSuccess={handleApplicationSuccess} />
         <Testimonials />
         <Contact />
       </main>

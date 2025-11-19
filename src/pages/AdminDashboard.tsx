@@ -10,11 +10,12 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { SignOut, MagnifyingGlass, Download, Eye, Funnel, SortAscending, Buildings } from "@phosphor-icons/react"
+import { SignOut, MagnifyingGlass, Download, Eye, Funnel, SortAscending, Buildings, ChartBar } from "@phosphor-icons/react"
 import { toast } from "sonner"
 import { useAuth } from "@/contexts/AuthContext"
 import { supabase, Applicant } from "@/lib/supabase"
 import { BusinessInfoManager } from "@/components/admin/BusinessInfoManager"
+import { AnalyticsDashboard } from "@/components/admin/AnalyticsDashboard"
 
 const statusColors = {
   new: "bg-accent/20 text-accent-foreground dark:bg-accent/30",
@@ -220,6 +221,10 @@ export function AdminDashboard() {
         <Tabs defaultValue="applicants" className="w-full">
           <TabsList className="mb-6">
             <TabsTrigger value="applicants">Applicants</TabsTrigger>
+            <TabsTrigger value="analytics">
+              <ChartBar size={16} className="mr-2" />
+              Analytics
+            </TabsTrigger>
             <TabsTrigger value="business-info">
               <Buildings size={16} className="mr-2" />
               Business Info & SEO
@@ -342,7 +347,11 @@ export function AdminDashboard() {
                     <TableRow key={applicant.id}>
                       <TableCell className="font-medium">{applicant.full_name}</TableCell>
                       <TableCell>{applicant.email}</TableCell>
-                      <TableCell>{applicant.position_interested}</TableCell>
+                      <TableCell>
+                        {applicant.positions_interested && applicant.positions_interested.length > 0
+                          ? applicant.positions_interested.join(', ')
+                          : applicant.position_interested}
+                      </TableCell>
                       <TableCell>{applicant.experience_years} years</TableCell>
                       <TableCell>
                         <Badge className={statusColors[applicant.status]}>
@@ -426,8 +435,12 @@ export function AdminDashboard() {
                 <h3 className="font-semibold text-lg">Professional Information</h3>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <Label className="text-muted-foreground">Position Interested</Label>
-                    <p className="font-medium">{selectedApplicant.position_interested}</p>
+                    <Label className="text-muted-foreground">Position(s) Interested</Label>
+                    <p className="font-medium">
+                      {selectedApplicant.positions_interested && selectedApplicant.positions_interested.length > 0
+                        ? selectedApplicant.positions_interested.join(', ')
+                        : selectedApplicant.position_interested}
+                    </p>
                   </div>
                   <div>
                     <Label className="text-muted-foreground">Years of Experience</Label>
@@ -498,6 +511,10 @@ export function AdminDashboard() {
           )}
         </DialogContent>
       </Dialog>
+          </TabsContent>
+
+          <TabsContent value="analytics">
+            <AnalyticsDashboard />
           </TabsContent>
 
           <TabsContent value="business-info">

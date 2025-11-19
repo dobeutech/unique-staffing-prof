@@ -1,11 +1,11 @@
 import { useTheme } from 'next-themes'
 import { useEffect, useState } from 'react'
-import { Moon, Sun } from 'lucide-react'
+import { Moon, Sun, Monitor } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useLanguage } from '@/contexts/LanguageContext'
 
 export function ThemeToggle() {
-  const { theme, setTheme } = useTheme()
+  const { theme, setTheme, systemTheme } = useTheme()
   const { t } = useLanguage()
   const [mounted, setMounted] = useState(false)
 
@@ -13,15 +13,58 @@ export function ThemeToggle() {
     setMounted(true)
   }, [])
 
-  const toggleTheme = () => {
-    const newTheme = theme === 'dark' ? 'light' : 'dark'
+  const cycleTheme = () => {
+    let newTheme: string
+    let themeName: string
+
+    if (theme === 'light') {
+      newTheme = 'dark'
+      themeName = t('theme.dark')
+    } else if (theme === 'dark') {
+      newTheme = 'system'
+      themeName = t('theme.system') || 'System'
+    } else {
+      newTheme = 'light'
+      themeName = t('theme.light')
+    }
+
     setTheme(newTheme)
 
     const announcement = document.getElementById('theme-announcement')
     if (announcement) {
-      const themeName = newTheme === 'dark' ? t('theme.dark') : t('theme.light')
-      announcement.textContent = `${t('accessibility.themeChanged')} ${themeName}`
+      announcement.textContent = `${t('accessibility.themeChanged') || 'Theme changed to'} ${themeName}`
     }
+  }
+
+  const getCurrentIcon = () => {
+    if (!mounted) {
+      return <Sun className="h-4 w-4" />
+    }
+
+    if (theme === 'system') {
+      return <Monitor className="h-4 w-4 transition-transform duration-300" />
+    }
+
+    const resolvedTheme = theme === 'system' ? systemTheme : theme
+
+    return (
+      <>
+        <Sun className={`absolute h-4 w-4 transition-all duration-300 ${
+          resolvedTheme === 'dark' ? 'rotate-90 scale-0' : 'rotate-0 scale-100'
+        }`} />
+        <Moon className={`absolute h-4 w-4 transition-all duration-300 ${
+          resolvedTheme === 'dark' ? 'rotate-0 scale-100' : '-rotate-90 scale-0'
+        }`} />
+      </>
+    )
+  }
+
+  const getAriaLabel = () => {
+    if (!mounted) return t('theme.toggle') || 'Toggle theme'
+
+    if (theme === 'light') return t('theme.light') || 'Light mode'
+    if (theme === 'dark') return t('theme.dark') || 'Dark mode'
+    return t('theme.system') || 'System mode'
   }
 
   if (!mounted) {
@@ -43,16 +86,13 @@ export function ThemeToggle() {
       <Button
         variant="ghost"
         size="icon"
-        onClick={toggleTheme}
+        onClick={cycleTheme}
         className="relative h-9 w-9 transition-colors hover:bg-accent focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-        aria-label={t('theme.toggle')}
-        aria-pressed={theme === 'dark'}
+        aria-label={`${getAriaLabel()}. Click to cycle theme modes.`}
+        title={`Current: ${getAriaLabel()}. Click to cycle through Light, Dark, and System modes.`}
       >
-        <Sun className="h-4 w-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-        <Moon className="absolute h-4 w-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-        <span className="sr-only">
-          {theme === 'dark' ? t('theme.light') : t('theme.dark')}
-        </span>
+        {getCurrentIcon()}
+        <span className="sr-only">{getAriaLabel()}</span>
       </Button>
       <div
         id="theme-announcement"

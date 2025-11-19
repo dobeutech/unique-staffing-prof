@@ -8,6 +8,8 @@ import { Home } from "@/pages/Home"
 import { ServiceAreaPage } from "@/pages/ServiceAreaPage"
 import { AdminLogin } from "@/pages/AdminLogin"
 import { AdminDashboard } from "@/pages/AdminDashboard"
+import { ApplicationConfirmation } from "@/pages/ApplicationConfirmation"
+import { EmailVerification } from "@/pages/EmailVerification"
 import { Toaster } from "@/components/ui/sonner"
 
 function App() {
@@ -20,6 +22,8 @@ function App() {
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/service-area/:city" element={<ServiceAreaPage />} />
+                <Route path="/application-confirmation" element={<ApplicationConfirmation />} />
+                <Route path="/verify-email" element={<EmailVerification />} />
                 <Route path="/admin/login" element={<AdminLogin />} />
                 <Route
                   path="/admin/dashboard"
