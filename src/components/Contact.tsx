@@ -24,7 +24,7 @@ interface ContactSubmission {
 export function Contact() {
   const { businessInfo } = useBusinessInfo()
   const { t } = useLanguage()
-  const [submissions, setSubmissions] = useKV<ContactSubmission[]>("contact-submissions", [])
+  const [, setSubmissions] = useKV<ContactSubmission[]>("contact-submissions", [])
   const [formData, setFormData] = useState({
     name: "",
     email: "",

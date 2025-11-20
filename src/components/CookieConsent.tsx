@@ -5,7 +5,7 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { X, Cookie, Shield } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useLanguage } from '@/contexts/LanguageContext'
-import { supabase } from '@/lib/supabase'
+// import { supabase } from '@/lib/supabase' // Reserved for future use
 import { trackVisitor, updateCookieConsent } from '@/lib/analytics'
 
 const CONSENT_KEY = 'cookie_consent'

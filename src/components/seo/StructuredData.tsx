@@ -209,7 +209,7 @@ export function StructuredData({ businessInfo, breadcrumbs, type = "home" }: Str
       }
     }
 
-    const ldJsonScripts = [
+    const ldJsonScripts: Array<LocalBusinessSchema | OrganizationSchema | WebSiteSchema | BreadcrumbSchema> = [
       localBusinessSchema,
       organizationSchema,
       websiteSchema

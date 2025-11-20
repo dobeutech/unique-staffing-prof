@@ -79,8 +79,8 @@ export function ApplyForm({ onSuccess }: ApplyFormProps) {
     setIsSubmitting(true)
 
     try {
-      let resumeUrl = null
-      let resumeFilename = null
+      let resumeUrl: string | null = null
+      let resumeFilename: string | null = null
 
       // Upload resume if provided
       if (resume) {

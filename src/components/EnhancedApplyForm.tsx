@@ -222,8 +222,8 @@ export function EnhancedApplyForm({ onSuccess }: EnhancedApplyFormProps) {
       const tokenExpiry = getTokenExpiry()
 
       // Upload resume
-      let resumeUrl = null
-      let resumeFilename = null
+      let resumeUrl: string | null = null
+      let resumeFilename: string | null = null
 
       if (resume) {
         const uploadResult = await uploadFile(resume, 'resumes')

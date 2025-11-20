@@ -248,25 +248,6 @@ export interface Translations {
     languageChanged: string
     themeChanged: string
   }
-  cookieConsent: {
-    title: string
-    description: string
-    acceptAll: string
-    rejectAll: string
-    customize: string
-    save: string
-    necessary: string
-    necessaryDesc: string
-    functional: string
-    functionalDesc: string
-    analytics: string
-    analyticsDesc: string
-    marketing: string
-    marketingDesc: string
-    learnMore: string
-    doNotSell: string
-    hideDetails: string
-  }
   jobs: {
     title: string
     subtitle: string
@@ -633,25 +614,6 @@ export const translations: Record<Language, Translations> = {
       languageChanged: 'Language changed to',
       themeChanged: 'Theme changed to',
     },
-    cookieConsent: {
-      title: 'We Value Your Privacy',
-      description: 'We use cookies and similar technologies to enhance your experience, analyze site traffic, and provide personalized content. You can customize your preferences below.',
-      acceptAll: 'Accept All',
-      rejectAll: 'Reject All',
-      customize: 'Customize',
-      save: 'Save Preferences',
-      necessary: 'Necessary Cookies',
-      necessaryDesc: 'Essential for website functionality. These cannot be disabled.',
-      functional: 'Functional Cookies',
-      functionalDesc: 'Enable enhanced functionality and personalization.',
-      analytics: 'Analytics Cookies',
-      analyticsDesc: 'Help us understand how visitors interact with our website.',
-      marketing: 'Marketing Cookies',
-      marketingDesc: 'Used to track visitors and display relevant advertisements.',
-      learnMore: 'Learn more in our Privacy Policy',
-      doNotSell: 'Do Not Sell My Personal Information',
-      hideDetails: 'Hide Details',
-    },
     jobs: {
       title: 'Current Job Openings',
       subtitle: 'Find your next career opportunity with top employers in your area',
@@ -1004,18 +966,17 @@ export const translations: Record<Language, Translations> = {
       acceptAll: 'Aceptar Todas',
       rejectAll: 'Rechazar Todas',
       customize: 'Personalizar',
-      save: 'Guardar Preferencias',
-      necessary: 'Cookies Necesarias',
-      necessaryDesc: 'Esenciales para la funcionalidad del sitio web. No se pueden desactivar.',
-      functional: 'Cookies Funcionales',
-      functionalDesc: 'Habilitan funcionalidades mejoradas y personalización.',
+      savePreferences: 'Guardar Preferencias',
+      back: 'Atrás',
+      essential: 'Cookies Esenciales',
+      essentialDesc: 'Esenciales para la funcionalidad del sitio web. No se pueden desactivar.',
       analytics: 'Cookies de Análisis',
       analyticsDesc: 'Nos ayudan a entender cómo los visitantes interactúan con nuestro sitio web.',
       marketing: 'Cookies de Marketing',
       marketingDesc: 'Utilizadas para rastrear visitantes y mostrar anuncios relevantes.',
+      ccpaNotice: 'Aviso CCPA',
       learnMore: 'Más información en nuestra Política de Privacidad',
-      doNotSell: 'No Vender Mi Información Personal',
-      hideDetails: 'Ocultar Detalles',
+      privacyPolicy: 'Política de Privacidad',
     },
     jobs: {
       title: 'Ofertas de Empleo Actuales',
@@ -1369,18 +1330,17 @@ export const translations: Record<Language, Translations> = {
       acceptAll: 'Tout Accepter',
       rejectAll: 'Tout Rejeter',
       customize: 'Personnaliser',
-      save: 'Enregistrer les Préférences',
-      necessary: 'Cookies Nécessaires',
-      necessaryDesc: 'Essentiels pour la fonctionnalité du site web. Ne peuvent pas être désactivés.',
-      functional: 'Cookies Fonctionnels',
-      functionalDesc: 'Activent des fonctionnalités améliorées et la personnalisation.',
+      savePreferences: 'Enregistrer les Préférences',
+      back: 'Retour',
+      essential: 'Cookies Essentiels',
+      essentialDesc: 'Essentiels pour la fonctionnalité du site web. Ne peuvent pas être désactivés.',
       analytics: 'Cookies Analytiques',
       analyticsDesc: 'Nous aident à comprendre comment les visiteurs interagissent avec notre site web.',
       marketing: 'Cookies Marketing',
       marketingDesc: 'Utilisés pour suivre les visiteurs et afficher des publicités pertinentes.',
+      ccpaNotice: 'Avis CCPA',
       learnMore: 'En savoir plus dans notre Politique de Confidentialité',
-      doNotSell: 'Ne Pas Vendre Mes Informations Personnelles',
-      hideDetails: 'Masquer les Détails',
+      privacyPolicy: 'Politique de Confidentialité',
     },
     jobs: {
       title: 'Offres d\'Emploi Actuelles',

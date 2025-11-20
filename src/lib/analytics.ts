@@ -165,6 +165,7 @@ export function initAnalytics() {
 // Placeholder for Google Analytics integration (to be added later)
 export function initGoogleAnalytics(measurementId: string) {
   // TODO: Add Google Analytics GA4 tracking code when measurement ID is provided
+  // eslint-disable-next-line no-console
   console.log('Google Analytics initialization placeholder. Measurement ID:', measurementId)
   
   // Add GA4 script to document head

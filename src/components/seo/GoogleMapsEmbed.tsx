@@ -17,7 +17,7 @@ export function GoogleMapsEmbed({
   showDirections = true,
   className = ""
 }: GoogleMapsEmbedProps) {
-  const mapRef = useRef<HTMLDivElement>(null)
+  const mapRef = useRef<HTMLIFrameElement>(null)
   const [mapError, setMapError] = useState(false)
 
   const { location, geo, name } = businessInfo
