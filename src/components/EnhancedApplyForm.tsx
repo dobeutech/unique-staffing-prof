@@ -78,6 +78,41 @@ export function EnhancedApplyForm({ onSuccess }: EnhancedApplyFormProps) {
 
   const [errors, setErrors] = useState<Record<string, string>>({})
 
+  const getSubmissionErrorDetails = (error: unknown) => {
+    if (typeof error === 'object' && error !== null) {
+      const message = 'message' in error ? String((error as any).message ?? '') : ''
+      const details = 'details' in error ? String((error as any).details ?? '') : ''
+      const hint = 'hint' in error ? String((error as any).hint ?? '') : ''
+      const combined = `${message} ${details} ${hint}`.toLowerCase()
+
+      if (combined.includes('position_interested')) {
+        return {
+          title: "Tell us your top position",
+          description: "We need at least one primary position of interest to route your application. Please reselect your preferred role and try again."
+        }
+      }
+
+      if (combined.includes('phone_normalized')) {
+        return {
+          title: "Phone number format issue",
+          description: "Please double-check your phone number (digits only) so we can check for duplicate applications."
+        }
+      }
+
+      if (message) {
+        return {
+          title: "We couldn't submit your application",
+          description: message
+        }
+      }
+    }
+
+    return {
+      title: "We couldn't submit your application",
+      description: "Please review your entries and try again. If this continues, contact omorilla@uniquestaffingprofessionals.com."
+    }
+  }
+
   const validateField = (name: string, value: any): string => {
     switch (name) {
       case 'full_name':
@@ -236,26 +271,29 @@ export function EnhancedApplyForm({ onSuccess }: EnhancedApplyFormProps) {
         resumeFilename = uploadResult.filename
       }
 
-      // Create initial applicant record (unverified)
-      const applicantData: ApplicantInsert = {
-        full_name: formData.full_name,
-        email: formData.email,
-        email_confirmed: formData.email_confirmed,
-        email_verified: false,
-        email_verification_token: verificationToken,
-        token_expiry: tokenExpiry,
-        phone: formData.phone,
-        phone_normalized: normalizePhone(formData.phone),
-        positions_interested: formData.positions,
-        experience_years: parseInt(formData.experience_years),
-        resume_url: resumeUrl,
-        resume_filename: resumeFilename,
-        cover_letter: formData.cover_letter_text || null,
-        job_posting_url: formData.job_posting_url || null,
-        linkedin_url: formData.linkedin_url || null,
-        portfolio_url: formData.portfolio_url || null,
-        status: 'new'
-      }
+        // Create initial applicant record (unverified)
+        const primaryPosition = formData.positions[0]
+
+        const applicantData: ApplicantInsert = {
+          full_name: formData.full_name,
+          email: formData.email,
+          email_confirmed: formData.email_confirmed,
+          email_verified: false,
+          email_verification_token: verificationToken,
+          token_expiry: tokenExpiry,
+          phone: formData.phone,
+          phone_normalized: normalizePhone(formData.phone),
+          position_interested: primaryPosition,
+          positions_interested: formData.positions,
+          experience_years: parseInt(formData.experience_years),
+          resume_url: resumeUrl,
+          resume_filename: resumeFilename,
+          cover_letter: formData.cover_letter_text || null,
+          job_posting_url: formData.job_posting_url || null,
+          linkedin_url: formData.linkedin_url || null,
+          portfolio_url: formData.portfolio_url || null,
+          status: 'new'
+        }
 
       const { data: applicant, error: applicantError } = await supabase
         .from('applicants')
@@ -313,14 +351,16 @@ export function EnhancedApplyForm({ onSuccess }: EnhancedApplyFormProps) {
       setAdditionalDocs([])
       setErrors({})
 
-      if (resumeInputRef.current) resumeInputRef.current.value = ""
-      if (docInputRef.current) docInputRef.current.value = ""
+        if (resumeInputRef.current) resumeInputRef.current.value = ""
+        if (docInputRef.current) docInputRef.current.value = ""
 
-      if (onSuccess) onSuccess()
-
-    } catch (error) {
-      console.error('Error submitting application:', error)
-      toast.error("Failed to submit application. Please try again.")
+        if (onSuccess) onSuccess()
+      } catch (error) {
+        console.error('Error submitting application:', error)
+        const submissionError = getSubmissionErrorDetails(error)
+        toast.error(submissionError.title, {
+          description: submissionError.description
+        })
     } finally {
       setIsSubmitting(false)
     }
