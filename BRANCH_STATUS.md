@@ -6,12 +6,11 @@
 main (protected)
 └── b5fd7c7 "Create eslint.yml" (2025-11-20)
     │
-    ├── dev ✅ MERGE
-    │   └── e020e24 "ci: add CI/CD pipeline" (+8 commits)
-    │       - CI/CD workflows
-    │       - Security scanning
-    │       - TypeScript fixes
-    │       - Theme improvements
+    ├── dev ⚠️ DELETE OR UPDATE
+    │   └── e020e24 "ci: add CI/CD pipeline" (PR #15 MERGED ✅)
+    │       - Already merged to main
+    │       - Now 17 commits behind main
+    │       - Recommend: delete or update from main
     │
     ├── Dependabot PRs ⚠️ TEST & MERGE
     │   ├── #20 vite 7.2.4 (major upgrade)
@@ -21,9 +20,9 @@ main (protected)
     │   ├── #22 three 0.181.2 (feature)
     │   └── #16 tj-actions/changed-files
     │
-    ├── Cursor Debug Branches ❌ DELETE
+    ├── Cursor Debug Branches ⚠️ REVIEW PR #17, THEN DELETE
     │   ├── cursor/...-0ed5 (form error handling)
-    │   ├── cursor/...-6b46 (form error handling)
+    │   ├── cursor/...-6b46 (PR #17 DRAFT - form error handling)
     │   ├── cursor/...-7ebf (form debugging)
     │   ├── cursor/...-9af5 (form debugging)
     │   └── cursor/...-ebb2 (form debugging)
@@ -35,11 +34,21 @@ main (protected)
 ## Action Checklist
 
 ### Priority 1 (Now)
-- [ ] **Merge dev → main**
+- [ ] **Review PR #17 (Draft)**
   ```bash
-  # Create PR from dev to main
-  # Review and approve
-  # Merge using GitHub UI
+  # Decide: complete and merge, or close
+  # Branch: cursor/debug-network-join-form-submission-6b46
+  # Blocks deletion of 5 cursor branches
+  ```
+
+- [ ] **Delete or Update dev branch**
+  ```bash
+  # Dev was already merged via PR #15 ✅
+  # Option 1: Delete (recommended)
+  git push origin --delete dev
+  
+  # Option 2: Update from main (if keeping as active dev branch)
+  git checkout dev && git merge main && git push origin dev
   ```
 
 ### Priority 2 (This Week)
@@ -56,9 +65,17 @@ main (protected)
 
 - [ ] **Clean up Cursor branches**
   ```bash
-  # After verifying PR #17 status:
+  # After closing or merging PR #17:
+  
+  # If PR #17 is closed, delete all 5:
   git push origin --delete cursor/debug-network-join-form-submission-0ed5
   git push origin --delete cursor/debug-network-join-form-submission-6b46
+  git push origin --delete cursor/debug-network-join-form-submission-7ebf
+  git push origin --delete cursor/debug-network-join-form-submission-9af5
+  git push origin --delete cursor/debug-network-join-form-submission-ebb2
+  
+  # If PR #17 is merged, delete the other 4:
+  git push origin --delete cursor/debug-network-join-form-submission-0ed5
   git push origin --delete cursor/debug-network-join-form-submission-7ebf
   git push origin --delete cursor/debug-network-join-form-submission-9af5
   git push origin --delete cursor/debug-network-join-form-submission-ebb2
@@ -76,20 +93,19 @@ main (protected)
 | Category | Count | Status |
 |----------|-------|--------|
 | Main branch | 1 | Protected ✅ |
-| Development branches | 1 | Ready to merge ✅ |
+| Development branches | 1 | Delete or update ⚠️ |
 | Dependency updates | 6 | Need testing ⚠️ |
-| Debug branches | 5 | Delete ❌ |
+| Debug branches | 5 | Review PR #17 first ⚠️ |
 | Review branches | 1 | Temporary 🔄 |
 | **Total** | **14** | |
 
 ## Important Notes
 
-1. **dev branch contains critical updates:**
-   - GitHub Actions CI/CD pipeline
-   - Security scanning automation
-   - AI code review integration
-   - Build and test automation
-   - TypeScript and lint fixes
+1. **dev branch has been merged:**
+   - PR #15 merged all dev changes to main ✅
+   - CI/CD pipeline, security scanning, TypeScript fixes are now in main
+   - Dev branch is now 17 commits behind main
+   - Recommend deleting or updating the branch
 
 2. **Dependabot PRs need individual testing:**
    - vite and plugin-react-swc are major version bumps
