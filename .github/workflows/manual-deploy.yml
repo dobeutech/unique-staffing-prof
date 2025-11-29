@@ -115,8 +115,8 @@ jobs:
             Manual deployment by ${{ github.actor }}
             ${{ inputs.deployment_message }}
           enable-pull-request-comment: false
-          enable-commit-comment: true
-          enable-commit-status: true
+          enable-commit-comment: false
+          enable-commit-status: false
           alias: ${{ inputs.environment }}
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
