@@ -158,7 +158,7 @@ The downgrade of `mem0ai` from v2.x to v1.x is a major version change.
 ## Next Steps
 
 1. ✅ **Immediate:** All security vulnerabilities resolved
-2. ⚠️ **Short-term:** Test mem0ai functionality after downgrade
+2. 🗑️ **Short-term:** Remove unused mem0ai package from dependencies
 3. 📋 **Medium-term:** Monitor for mem0ai v2.x security updates
 4. 🔄 **Ongoing:** Regular security audits with `npm audit`
 
