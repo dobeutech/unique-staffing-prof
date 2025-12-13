@@ -292,11 +292,24 @@ export function EnhancedApplyForm({ onSuccess }: EnhancedApplyFormProps) {
         : 'en'
 
       // Create initial applicant record (unverified)
+      type CommunicationPreferences = {
+        utm_source: string | null
+        utm_medium: string | null
+        utm_campaign: string | null
+        utm_term: string | null
+        utm_content: string | null
+        referrer: string
+        landing_page: string
+        submitted_at: string
+        user_agent: string
+        submission_language: string
+      }
+
       const applicantData: ApplicantInsert & {
         newsletter_subscribed?: boolean
         job_notifications_enabled?: boolean
         sms_notifications_enabled?: boolean
-        communication_preferences?: object
+        communication_preferences?: CommunicationPreferences | null
         subscription_source?: string
       } = {
         full_name: formData.full_name,
