@@ -41,15 +41,17 @@ export function AccessibilityControls() {
 
   // Load settings from localStorage on mount
   useEffect(() => {
-    const savedSettings = localStorage.getItem('accessibility_settings')
-    if (savedSettings) {
-      try {
-        const parsed = JSON.parse(savedSettings)
-        setSettings(parsed)
-        applySettings(parsed)
-      } catch (e) {
-        console.error('Error loading accessibility settings:', e)
+    try {
+      if (typeof window !== 'undefined' && 'localStorage' in window) {
+        const savedSettings = window.localStorage.getItem('accessibility_settings')
+        if (savedSettings) {
+          const parsed: AccessibilitySettings = JSON.parse(savedSettings)
+          setSettings(parsed)
+          applySettings(parsed)
+        }
       }
+    } catch (e) {
+      console.error('Error loading accessibility settings:', e)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
