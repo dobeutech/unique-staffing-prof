@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom"
+import { motion } from "framer-motion"
 import { Navigation } from "@/components/Navigation"
 import { Hero } from "@/components/Hero"
 import { Services } from "@/components/Services"
@@ -10,6 +11,7 @@ import { Contact } from "@/components/Contact"
 import { Footer } from "@/components/Footer"
 import { JobListings } from "@/components/JobListings"
 import { TalentNetworkModal } from "@/components/TalentNetworkModal"
+import { AnimatedBackground, FloatingOrbs } from "@/components/AnimatedBackground"
 import { useBusinessInfo } from "@/contexts/BusinessInfoContext"
 import { SEOHead } from "@/components/seo/SEOHead"
 import { StructuredData } from "@/components/seo/StructuredData"
@@ -26,20 +28,42 @@ export function Home() {
 
   if (!businessInfo) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <motion.div
+          className="flex flex-col items-center gap-4"
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5 }}
+        >
+          <div className="relative w-16 h-16">
+            <motion.div
+              className="absolute inset-0 rounded-full border-4 border-primary/20"
+              animate={{ rotate: 360 }}
+              transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+            />
+            <motion.div
+              className="absolute inset-0 rounded-full border-4 border-t-primary border-r-transparent border-b-transparent border-l-transparent"
+              animate={{ rotate: 360 }}
+              transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+            />
+          </div>
+          <span className="text-muted-foreground text-sm">Loading...</span>
+        </motion.div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen relative overflow-x-hidden">
+      {/* Skip to content link */}
       <a
         href="#main-content"
         className="sr-only focus:not-sr-only"
       >
         {t('accessibility.skipToContent')}
       </a>
+      
+      {/* SEO */}
       <SEOHead
         businessInfo={businessInfo}
         keywords={[
@@ -53,10 +77,24 @@ export function Home() {
         ]}
       />
       <StructuredData businessInfo={businessInfo} type="home" />
+      
+      {/* Animated backgrounds */}
+      <AnimatedBackground particleCount={40} connectionDistance={120} />
+      <FloatingOrbs />
+      
+      {/* Navigation with glassmorphic effect */}
       <Navigation />
-      <main id="main-content">
+      
+      {/* Main content with relative z-index above background */}
+      <main id="main-content" className="relative z-10">
         <Hero />
-        <Services />
+        
+        {/* Section divider with gradient fade */}
+        <div className="relative">
+          <div className="absolute inset-x-0 -top-20 h-40 bg-gradient-to-b from-transparent to-background pointer-events-none z-20" />
+          <Services />
+        </div>
+        
         <Industries />
         <JobListings />
         <WhyChooseUs />
@@ -64,7 +102,11 @@ export function Home() {
         <Testimonials />
         <Contact />
       </main>
+      
+      {/* Footer */}
       <Footer />
+      
+      {/* Talent Network Modal */}
       <TalentNetworkModal />
     </div>
   )
