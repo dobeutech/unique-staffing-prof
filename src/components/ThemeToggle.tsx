@@ -218,15 +218,13 @@ export function SystemToggle() {
           variant="ghost"
           size="icon"
           onClick={toggleSystem}
-          className={`relative h-9 w-9 transition-colors hover:bg-accent focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${
-            theme === 'system' ? 'bg-accent' : ''
+          className={`relative h-9 w-9 transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${
+            theme === 'system' ? 'bg-primary text-primary-foreground' : ''
           }`}
           aria-label={getSystemAriaLabel()}
           aria-pressed={theme === 'system'}
         >
-          <Monitor className={`h-4 w-4 transition-all duration-300 ${
-            theme === 'system' ? 'text-primary' : ''
-          }`} />
+          <Monitor className="h-4 w-4 transition-all duration-300" />
           <span className="sr-only">{getSystemAriaLabel()}</span>
         </Button>
       </TooltipTrigger>
