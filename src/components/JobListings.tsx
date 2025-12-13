@@ -22,30 +22,8 @@ export function JobListings() {
     fetchJobs()
   }, [])
 
+  // Filter jobs whenever jobs data or search filters change
   useEffect(() => {
-    filterJobs()
-  }, [filterJobs])
-
-  const fetchJobs = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('jobs')
-        .select('*')
-        .eq('is_active', true)
-        .order('featured', { ascending: false })
-        .order('created_at', { ascending: false })
-
-      if (error) throw error
-      setJobs(data || [])
-      setFilteredJobs(data || [])
-    } catch (error) {
-      console.error('Error fetching jobs:', error)
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const filterJobs = useCallback(() => {
     let filtered = jobs
 
     if (searchTitle.trim()) {
@@ -63,6 +41,46 @@ export function JobListings() {
 
     setFilteredJobs(filtered)
   }, [jobs, searchTitle, searchZip])
+
+  const fetchJobs = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('jobs')
+        .select('*')
+        .eq('is_active', true)
+        .order('featured', { ascending: false })
+        .order('created_at', { ascending: false })
+
+      if (error) throw error
+      setJobs(data || [])
+      // Don't set filteredJobs here - the useEffect will handle filtering
+    } catch (error) {
+      console.error('Error fetching jobs:', error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const filterJobs = () => {
+    // This function is kept for the handleSearch form submission
+    // The actual filtering is handled by the useEffect above
+    let filtered = jobs
+
+    if (searchTitle.trim()) {
+      filtered = filtered.filter(job =>
+        job.title.toLowerCase().includes(searchTitle.toLowerCase()) ||
+        job.category.toLowerCase().includes(searchTitle.toLowerCase())
+      )
+    }
+
+    if (searchZip.trim()) {
+      filtered = filtered.filter(job =>
+        job.location_zip.startsWith(searchZip.trim())
+      )
+    }
+
+    setFilteredJobs(filtered)
+  }
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
