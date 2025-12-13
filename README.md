@@ -247,6 +247,8 @@ supabase/
 | sms_notifications_enabled | boolean | SMS consent |
 | communication_preferences | jsonb | UTM/tracking data |
 | subscription_source | text | Referral source |
+| preferred_language | text | User's selected language (en/es/fr) |
+| browser_language | text | Browser detected language |
 
 ### Additional Tables
 - `visitor_analytics` - Page views and tracking

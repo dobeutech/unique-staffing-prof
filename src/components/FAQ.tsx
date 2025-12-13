@@ -6,7 +6,6 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion'
-import { useLanguage } from '@/contexts/LanguageContext'
 import { Question } from '@phosphor-icons/react'
 
 const faqData = {
@@ -65,7 +64,6 @@ const faqData = {
 }
 
 export function FAQ() {
-  const { t } = useLanguage()
   const ref = useRef<HTMLDivElement>(null)
   const isInView = useInView(ref, { once: true, amount: 0.2 })
 

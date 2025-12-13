@@ -44,7 +44,7 @@ const POSITIONS = [
 // DOCUMENT_TYPES removed - not currently used in the form
 
 export function EnhancedApplyForm({ onSuccess }: EnhancedApplyFormProps) {
-  const { t } = useLanguage()
+  const { t, language } = useLanguage()
   const [formData, setFormData] = useState({
     full_name: "",
     email: "",
@@ -280,8 +280,12 @@ export function EnhancedApplyForm({ onSuccess }: EnhancedApplyFormProps) {
         referrer: trackingData.referrer,
         landing_page: trackingData.landing_page,
         submitted_at: new Date().toISOString(),
-        user_agent: navigator.userAgent
+        user_agent: navigator.userAgent,
+        submission_language: language
       } : null
+      
+      // Get browser language for analytics
+      const browserLanguage = navigator.language || navigator.languages?.[0] || 'en'
 
       // Create initial applicant record (unverified)
       const applicantData: ApplicantInsert & {
@@ -314,7 +318,10 @@ export function EnhancedApplyForm({ onSuccess }: EnhancedApplyFormProps) {
         sms_notifications_enabled: formData.sms_notifications_enabled,
         // Tracking data
         communication_preferences: trackingMetadata,
-        subscription_source: trackingData?.utm_source || trackingData?.referrer || 'direct'
+        subscription_source: trackingData?.utm_source || trackingData?.referrer || 'direct',
+        // Language tracking
+        preferred_language: language,
+        browser_language: browserLanguage
       }
 
       const { data: applicant, error: applicantError } = await supabase

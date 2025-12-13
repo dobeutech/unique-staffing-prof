@@ -13,7 +13,6 @@ import {
   EnvelopeSimple,
   WhatsappLogo
 } from '@phosphor-icons/react'
-import { useLanguage } from '@/contexts/LanguageContext'
 
 interface Message {
   id: string
@@ -31,7 +30,6 @@ const quickResponses = [
 ]
 
 export function LiveChat() {
-  const { t } = useLanguage()
   const [isOpen, setIsOpen] = useState(false)
   const [messages, setMessages] = useState<Message[]>([])
   const [inputValue, setInputValue] = useState('')

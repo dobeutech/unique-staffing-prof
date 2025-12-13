@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion"
+import { motion, AnimatePresence } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { List, X } from "@phosphor-icons/react"
 import { ThemeToggle, SystemToggle } from "@/components/ThemeToggle"
@@ -11,20 +11,8 @@ export function Navigation() {
   const [hasScrolled, setHasScrolled] = useState(false)
   const { t } = useLanguage()
   
-  const { scrollY } = useScroll()
-  
-  // Transform values based on scroll
-  const headerBackground = useTransform(
-    scrollY,
-    [0, 100],
-    ['rgba(var(--background-rgb), 0)', 'rgba(var(--background-rgb), 0.7)']
-  )
-  
-  const headerBlur = useTransform(
-    scrollY,
-    [0, 100],
-    ['blur(0px)', 'blur(16px)']
-  )
+  // Scroll-based effects reserved for future enhancement
+  // const { scrollY } = useScroll()
 
   useEffect(() => {
     const handleScroll = () => {

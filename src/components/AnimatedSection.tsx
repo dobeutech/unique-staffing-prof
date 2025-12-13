@@ -180,9 +180,10 @@ interface ParallaxProps {
 export function Parallax({
   children,
   className = '',
-  speed = 0.5
+  speed: _speed = 0.5
 }: ParallaxProps) {
   const ref = useRef<HTMLDivElement>(null)
+  // Note: speed parameter reserved for future parallax implementation
 
   return (
     <motion.div

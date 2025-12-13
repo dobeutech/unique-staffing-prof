@@ -137,6 +137,13 @@ components:
         sms_notifications_enabled:
           type: boolean
           description: Whether applicant consented to SMS
+        preferred_language:
+          type: string
+          enum: [en, es, fr]
+          description: Language the user selected when submitting application
+        browser_language:
+          type: string
+          description: Browser-detected language from Accept-Language header
         communication_preferences:
           type: object
           description: Detailed communication preferences and tracking data
