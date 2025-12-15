@@ -327,7 +327,7 @@ For production deployments, create a GitHub Environment:
 ### Useful Links
 
 - [GitHub Actions Docs](https://docs.github.com/en/actions)
-- [Netlify CI/CD](https://docs.netlify.com/configure-builds/continuous-deployment/)
+- [Netlify Git Integration](https://docs.netlify.com/git/overview/)
 - [Dependabot Docs](https://docs.github.com/en/code-security/dependabot)
 - [Security Best Practices](https://docs.github.com/en/code-security)
 
