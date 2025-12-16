@@ -197,7 +197,7 @@ If Claude or Copilot reviews aren't working:
 
 - [GitHub Actions Documentation](https://docs.github.com/en/actions)
 - [Dependabot Configuration](https://docs.github.com/en/code-security/dependabot)
-- [Netlify CI/CD](https://docs.netlify.com/configure-builds/continuous-deployment/)
+- [Netlify Git Integration](https://docs.netlify.com/git/overview/)
 - [Claude API Documentation](https://docs.anthropic.com/)
 
 ## 🤝 Contributing
