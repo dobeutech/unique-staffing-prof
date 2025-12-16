@@ -8,11 +8,12 @@ redirectsOrigin = "config"
 [[plugins]]
 origin = "ui"
 package = "@netlify/plugin-lighthouse"
+pinned_version = "6"
 
 [plugins.inputs]
 
 [build]
-publish = "E:\\DobeuTechSolutions\\projects\\uniquestaffingsolutions\\unique-staffing-prof-bolt\\dist"
+publish = "E:\\cursor\\cursor-projects\\uniquestaffingprofessionals\\unique-staffing-prof\\dist"
 publishOrigin = "config"
 commandOrigin = "config"
 command = "npm run build"
