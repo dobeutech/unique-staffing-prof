@@ -9,7 +9,13 @@
         "build": "tsc -b --noCheck && vite build",
         "lint": "eslint .",
         "optimize": "vite optimize",
-        "preview": "vite preview"
+        "preview": "vite preview",
+        "type-check": "tsc --noEmit",
+        "pre-commit": "bash scripts/pre-commit-check.sh",
+        "commit": "bash scripts/commit-help.sh",
+        "env-check": "bash scripts/env-check.sh",
+        "deps-audit": "bash scripts/deps-audit.sh",
+        "a11y-check": "bash scripts/a11y-check.sh"
     },
     "dependencies": {
         "@github/spark": "^0.39.0",
