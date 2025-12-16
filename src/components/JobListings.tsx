@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge"
 import { MagnifyingGlass, MapPin, Briefcase, Clock, CurrencyDollar } from "@phosphor-icons/react"
 import { supabase, Job } from "@/lib/supabase"
 import { useLanguage } from "@/contexts/LanguageContext"
-import { motion, useInView } from "framer-motion"
+import { motion } from "framer-motion"
 import { useRef } from "react"
 
 export function JobListings() {
@@ -17,15 +17,30 @@ export function JobListings() {
   const [searchZip, setSearchZip] = useState("")
   const [loading, setLoading] = useState(true)
   const ref = useRef<HTMLDivElement>(null)
-  const isInView = useInView(ref, { once: true, amount: 0.1 })
 
   useEffect(() => {
     fetchJobs()
   }, [])
 
+  // Filter jobs whenever jobs data or search filters change
   useEffect(() => {
-    filterJobs()
-  }, [searchTitle, searchZip, jobs])
+    let filtered = jobs
+
+    if (searchTitle.trim()) {
+      filtered = filtered.filter(job =>
+        job.title.toLowerCase().includes(searchTitle.toLowerCase()) ||
+        job.category.toLowerCase().includes(searchTitle.toLowerCase())
+      )
+    }
+
+    if (searchZip.trim()) {
+      filtered = filtered.filter(job =>
+        job.location_zip.startsWith(searchZip.trim())
+      )
+    }
+
+    setFilteredJobs(filtered)
+  }, [jobs, searchTitle, searchZip])
 
   const fetchJobs = async () => {
     try {
@@ -38,7 +53,7 @@ export function JobListings() {
 
       if (error) throw error
       setJobs(data || [])
-      setFilteredJobs(data || [])
+      // Don't set filteredJobs here - the useEffect will handle filtering
     } catch (error) {
       console.error('Error fetching jobs:', error)
     } finally {
@@ -47,6 +62,8 @@ export function JobListings() {
   }
 
   const filterJobs = () => {
+    // This function is kept for the handleSearch form submission
+    // The actual filtering is handled by the useEffect above
     let filtered = jobs
 
     if (searchTitle.trim()) {
