@@ -10,6 +10,7 @@
         "lint": "eslint .",
         "optimize": "vite optimize",
         "preview": "vite preview",
+        "test": "tsc --module NodeNext --moduleResolution NodeNext --target ES2020 --outDir node_modules/.test-dist --noEmit false src/lib/jobFiltering.ts && node --test test/jobFiltering.test.mjs",
         "type-check": "tsc --noEmit",
         "pre-commit": "bash scripts/pre-commit-check.sh",
         "commit": "bash scripts/commit-help.sh",
